@@ -243,4 +243,6 @@ input, textarea {
     padding-bottom: 3em;
 }
 
-
+.expanded-article .article-view {
+    margin-bottom: 50px;
+}
