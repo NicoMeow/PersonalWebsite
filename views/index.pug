@@ -1,0 +1,82 @@
+head
+  script(src='https://kit.fontawesome.com/0ef73380fb.js' crossorigin='anonymous')
+  link(rel='stylesheet' type='text/css' href='../styles/styles.css')
+  script(type='text/javascript' src='scripts/script.js')
+h1 Hi I&apos;m Charlene. Nice to meet you ^_^
+.section-block
+  h2 Moments
+  #imgContainer
+    - var photoNames
+    each path in photoNames
+        img.myImg(src='../images/'+path alt='img not found')
+  // The Modal
+  #myModal.modal
+    span.close &times;
+    span.prvImg
+      i.fas.fa-angle-left
+    img#expanded-image.modal-content
+    span.nxtImg
+      i.fas.fa-angle-right
+.section-block
+  h2 Projects
+  span.project
+    .projectIcon
+    .projectName
+    .projectDescription
+.section-block
+  h2 Thoughts
+  .blogPosts
+    - var blogPosts
+    each post in blogPosts
+        article.post(id=post._id)
+            h4.title=`${post.title}`
+            p.content=`${post.content}`
+            span.read-more More...
+    // The Expanded article
+  #expanded-article.expanded-article
+    span.close-article &times;
+    .expanded-article-content
+      .article-view
+        h4#title
+        p#content
+      #comment-view.comment-view
+        h2 Comments
+        #add-new-comment
+          iframe#dummyframe(name='dummyframe', style='display: none;')
+          form.message-forms(action='/leave-comment' method='post' target='dummyframe')
+            .column
+              label
+                | Add Comment
+                textarea#message-box-article.message-block(name='content' rows='10' cols='50' placeholder='Your Comment Here.')
+            .column
+              input(type='hidden' name='blogPostId' id='blogPostId')
+              label
+                | Name
+                input#name-article.message-block(name='name' type='text' placeholder='Enter Name')
+              br
+              label
+                | Email
+                input#email-article.message-block(name='email' type='email' placeholder='Enter Email')
+              br
+              input#send-article.post-comment(type='submit')
+.section-block
+  h2 Connect
+  form.message-forms(action='/send-message' method='post')
+    .column
+      label
+        | Message 
+        textarea#message-box.message-block(name='message' rows='10' cols='50' placeholder='Your Message Here.')
+    .column
+      label(for='name') Name
+      input#name.message-block(name='name' type='text' placeholder='Enter Name')
+      br
+      label(for='email') Email
+      input#email.message-block(name='email' type='email' placeholder='Enter Email')
+      br
+      input#send.post-comment(type='submit' value='Submit')
+.socialLink
+  a(href='https://www.facebook.com/profile.php?id=100006520725976')
+    i.fab.fa-facebook-square
+  a(href='https://www.instagram.com/charlene_z.h/')
+    i.fab.fa-instagram-square
+  i.fab.fa-linkedin
