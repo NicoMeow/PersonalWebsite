@@ -31,6 +31,11 @@ function pageLoad(){
         readMore.onclick = openArticle;
     }
     document.getElementsByClassName("close-article")[0].onclick = closeArticle;
+
+    //listen the submit event on blogPost comments
+//    var commentForm = document.getElementById("commentForm");
+//    console.log("commentForm is" + commentForm);
+//    commentForm.addEventListener('submit', sendUpdateComment());
 }
 
 
@@ -76,7 +81,6 @@ function openArticle() {
 //    var comments = loadComments(article);
 // return a JSON object containing all existing comments.
     function loadComments(article_id) {
-      console.log("loading comments")
       var xhttp = new XMLHttpRequest();
       xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
@@ -127,6 +131,18 @@ function closeArticle() {
         element.removeChild(commentNodes[0]);
     }
 }
+
+//function sendUpdateComment() {
+//    var xhr = new XMLHttpRequest();
+//    xhr.open("POST", "/send-message");
+//    console.log("code reached here");
+//    xhr.onreadystatechange = function(event){
+//        alert("server responded with: " + event.target.response); // raw response
+//    };
+//    // TODO..or on error, on abort
+//    var formData = new FormData(document.getElementById("commentForm"));
+//    xhr.send(formData);
+//}
 
 //// create the html section for al existing comments related to article
 //function createCommentNode(comments){
