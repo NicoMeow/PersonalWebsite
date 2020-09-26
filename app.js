@@ -7,6 +7,8 @@ const dotenv = require('dotenv');
 const fs = require('fs');
 dotenv.config();
 const nodemailer = require('nodemailer');
+const isImage = require('is-image');
+const multiparty = require('multiparty');
 const PORT = 8000;
 
 
@@ -47,60 +49,29 @@ const BLOG_POSTS = [
         content: "This is a much shorter most since no longer need to test lien spanning"
     },
 ]
-
-//example of comments retrieved from db
-const COMMENTS_BLOG1 = [
-    {
-        _id: 14232,
-        blogPostId: 1,
-        user: "b@gmail.com",
-        date: "06/09/2020",
-        content: "I disagree with everything you said. But I don't know why."},
-    {_id: 143442,
-        blogPostId: 1,
-        user: "a@hotmail.com",
-        date: "10/03/2020",
-        content: "I remember reading something similar on xxx's blog."
-    }];
-
-const COMMENTS_BLOG2 = [
-    {
-        _id: 14232,
-        blogPostId: 2,
-        user: "b@gmail.com",
-        date: "06/09/2020",
-        content: "Very interesting"},
-    {_id: 143442,
-        blogPostId: 2,
-        user: "a@hotmail.com",
-        date: "10/03/2020",
-        content: "Earth is flat."
-    }];
-
-//retrieve all the image path and put it in a list
-var photoNames = fs.readdirSync('public/images/');
+//retrieve all the image path, check if the file is image and put it in photoPaths array
+var rawPhotoPaths = fs.readdirSync('public/images/');
+var photoPaths=[];
+for (photo of rawPhotoPaths) {
+    if (isImage(photo)) {
+        photoPaths.push(photo);
+    }
+}
 
 app.get('/', (req, res) => {
     //Render index.html with blog posts and comments from database before sending
-
-    //Send the rendered file
-    //res.sendFile(__dirname + '/views/index.html');
     res.render('index', {
-        photoNames: photoNames,
+        photoPaths: photoPaths,
         blogPosts: BLOG_POSTS
     });
 
 })
 
 app.get('/get-comments/:id', (req, res) => {
-    console.log("sending comments");
-    console.log("request parameters are" + JSON.stringify(req.params))
     //retrieve the comment from the database that matches the request id
     var article_id = req.params.id;
     //do a database query based on article_id
     Comment.find({blogPostId: article_id}, function (err, docs) {
-        console.log("docs are" + docs);
-        console.log("are docs array" + Array.isArray(docs));
         res.send(docs);
         });
 })
@@ -144,23 +115,31 @@ app.post('/send-message', (req, res) => {
 })
 
 app.post('/leave-comment', (req, res) => {
-    console.log("clicked on submit button to leave comment");
-    console.log("request body is " + req.body);
-    console.log((JSON.stringify(req.body)));
-    let comment = req.body;
+    let form = new multiparty.Form();
+    let comment = {};
     comment.date = new Date();
-    console.log("comment is" + JSON.stringify(comment));
-    Comment.create(req.body).then((dbMessage) => {
-        //res.json(dbMessage);
-        // Send the response should render the document with the new comment
-
-    }).catch((err) => {
-        res.json(err);
+    form.parse(req, (err, fields, files) => {
+        console.log("fields are " + JSON.stringify(fields));
+        //console.log("files are " + JSON.stringify(files));
+        Object.keys(fields).forEach((key) => {
+            comment[key] = fields[key][0];
+        })
+        console.log("comment is" + JSON.stringify(comment));
+        Comment.create(comment).then((dbMessage) => {
+            res.send(comment);
+            // Send the response should render the document with the new comment
+        }).catch((err) => {
+            console.log("code reached error");
+            res.json(err);
+        })
     })
-})
+//    console.log("clicked on submit button to leave comment");
+//    console.log("request body is " + (JSON.stringify(req.body)));
+//    let comment = req.body;
+//    comment.date = new Date();
+//    console.log("comment is" + JSON.stringify(comment));
 
-//The remove comment function I temporarily put here
-Comment.remove();
+})
 
 
 

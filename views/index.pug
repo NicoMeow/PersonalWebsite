@@ -1,13 +1,13 @@
 head
   script(src='https://kit.fontawesome.com/0ef73380fb.js' crossorigin='anonymous')
+  script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js')
   link(rel='stylesheet' type='text/css' href='../styles/styles.css')
   script(type='text/javascript' src='scripts/script.js')
 h1 Hi I&apos;m Charlene. Nice to meet you ^_^
 .section-block
   h2 Moments
   #imgContainer
-    - var photoNames
-    each path in photoNames
+    each path in photoPaths
         img.myImg(src='../images/'+path alt='img not found')
   // The Modal
   #myModal.modal
@@ -26,7 +26,6 @@ h1 Hi I&apos;m Charlene. Nice to meet you ^_^
 .section-block
   h2 Thoughts
   .blogPosts
-    - var blogPosts
     each post in blogPosts
         article.post(id=post._id)
             h4.title=`${post.title}`
@@ -42,14 +41,13 @@ h1 Hi I&apos;m Charlene. Nice to meet you ^_^
       #comment-view.comment-view
         h2 Comments
         #add-new-comment
-          iframe#dummyframe(name='dummyframe', style='display: none;')
-          form.message-forms(action='/leave-comment' method='post' target='dummyframe')
+          form#commentForm.message-forms(action='/leave-comment' method='post')
+            input#blogPostId(type='hidden' name='blogPostId')
             .column
               label
                 | Add Comment
                 textarea#message-box-article.message-block(name='content' rows='10' cols='50' placeholder='Your Comment Here.')
             .column
-              input(type='hidden' name='blogPostId' id='blogPostId')
               label
                 | Name
                 input#name-article.message-block(name='name' type='text' placeholder='Enter Name')
