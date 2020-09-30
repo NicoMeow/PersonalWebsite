@@ -7,12 +7,14 @@ var curImgElement;
 var imgs;
 // The current expanded article
 var expandedView;
-//the comment form data
+//the comment form
 var commentForm;
+var messageForm;
 
 function pageLoad(){
+ console.log("display is" + document.getElementById('messageForm').style.display)
+ console.log("display is" + document.getElementById('commentForm').style.display)
     //set the global variables
-    //modal = document.getElementsByClassName('modal')[0];
     modal = document.getElementById("myModal")
     modalImg = document.getElementById("expanded-image");
     //captionText = document.getElementById("expanded-image-caption");
@@ -34,14 +36,32 @@ function pageLoad(){
     }
     document.getElementsByClassName("close-article")[0].onclick = closeArticle;
 
-    //listen the submit event on blogPost comments
-    // Access the form element...
-    commentForm = document.getElementById( "commentForm" );
-    // ...and take over its submit event.
-    commentForm.addEventListener( "submit", function (event) {
+    //listen the submit event on blogPost comments and take over its submit event.
+    commentForm = document.getElementById("commentForm");
+    commentForm.addEventListener("submit", function(event) {
         event.preventDefault();
-        sendUpdateComment();
+        //validate user input
+        if (commentFormValidate(this)){
+            sendUpdateComment();
+        }
     });
+
+    //listen to the submit event on message form and take over its submit event
+    messageForm = document.getElementById("messageForm");
+    messageForm.addEventListener("submit", function(event) {
+        event.preventDefault();
+        //validate user input
+        console.log("validation is" + messageFormValidate(this));
+        if (messageFormValidate(this)){
+            sendMessage();
+        }
+    })
+
+    //if user click on sendAnotherBtn button, the comment form should re-appear
+    document.getElementById("sendAnotherBtn").onclick = () => {
+       document.getElementById('messageForm').style.display = "block";
+       document.getElementById('successMessage').style.display = "none";
+    }
 }
 
 
@@ -66,7 +86,6 @@ function nxtSpan() {
         curImgElement = imgs[0];
     }
     modalImg.src = curImgElement.src;
-    captionText.innerHTML = curImgElement.alt;
 }
 
 function prvSpan() {
@@ -76,7 +95,6 @@ function prvSpan() {
         curImgElement = imgs[imgs.length - 1];
     }
     modalImg.src = curImgElement.src;
-    captionText.innerHTML = curImgElement.alt;
 }
 
 
@@ -103,38 +121,44 @@ function closeArticle() {
 }
 
 function sendUpdateComment() {
-    console.log("code reached sendUpdatedComment");
-    console.log("In sendUpdateComment form is" + commentForm.elements)
-    for (c of commentForm) {
-        console.log("c is" + c);
-    }
     var xhr = new XMLHttpRequest();
     //var FD = new FormData(commentForm);
     var FD = new FormData(commentForm);
-    console.log("FD is", FD.entries());
-    for (pair of FD.entries()) {
-        console.log(pair[0] + ", " + pair[1]);
-    }
     // Define what happens on successful data submission
     xhr.addEventListener("load", function(event) {
-      console.log("successful data submission")
-      //Reload all the comment data
+      // Clear the form and append the comment to existing comments;
       document.getElementById("commentForm").reset();
-      console.log("responseText is" + this.responseText);
       formatComment(JSON.parse(this.responseText));
     });
     // Define what happens in case of error
-    xhr.addEventListener("error", function( event ) {
+    xhr.addEventListener("error", function(event) {
       alert( 'Oops! Something went wrong.' );
     } );
-
     xhr.open("POST", "/leave-comment");
+    xhr.send(FD);
+}
+
+function sendMessage() {
+    var xhr = new XMLHttpRequest();
+    var FD = new FormData(messageForm);
+    // Define what happens on successful data submission
+    xhr.addEventListener("load", function(event) {
+       document.getElementById("messageForm").reset();
+       //replace the send message form with successMessage
+       document.getElementById('messageForm').style.display = "none";
+       document.getElementById('successMessage').style.display = "block";
+       console.log("display is" + document.getElementById('messageForm').display);
+    });
+    //Define what happens in case of error
+    xhr.addEventListener("error", function(event) {
+        alert( 'Oops! Something went wrong.');
+    });
+    xhr.open("POST", "/send-message");
     xhr.send(FD);
 }
 
 // return a JSON object containing all existing comments.
 function loadComments(articleID) {
-    console.log("code reached loadComments");
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
@@ -149,8 +173,6 @@ function loadComments(articleID) {
 }
 
 function formatComment(comment) {
-    console.log("comment is" + comment);
-    console.log("comment name is" + comment.name);
     var info_str = comment.name + " (" + comment.email + ") commented on " + comment.date;
     var content_str = comment.content;
     var comment_id = comment._id;
@@ -171,34 +193,46 @@ function formatComment(comment) {
     var child = document.getElementById("add-new-comment");
     element.insertBefore(existing_comment_div,child);
 }
-//// create the html section for al existing comments related to article
-//function createCommentNode(comments){
-//    //get "existing-comments" DOM node
-//    var existingComments = document.getElementsByClassName("existing-comments")[0];
-//    //append comments as children of this node
-//    for (comment of comments){
-//        var info = document.createElement('DIV');
-//        info.innerHTML = "user A posted sth on day b" // will be changed to comment metadata
-//        var content = document.createElement('DIV');
-//        content.innerHTML = "this is the content of the comment" // will eb changed to actual comment
-//        existingComments.body.appendChild(info);
-//        existingComments.body.appendChild(content);
-//    }
-//    console.log("existing comments are" + existingComments);
-//    return existingComments;
-//}
-//
 
-//
-//function loadComments(title) {
-//    // make a HTTP request to retrieve comments related to article
-//    let request = new XMLHttpRequest();
-//    request.open('GET', '/currentArticle/title');
-//    request.responseType = 'text';
-//    request.onload = () {
-//        return request.response;
-//    }
-//    request.send();
-//}
+// Check that the form fields are not empty and the email addresses are email
+function commentFormValidate(form){
+    if (form.name.value == "") {
+        alert("Please provide your name!");
+        form.name.focus();
+        return false;
+    }
+    if (form.email.value=="") {
+        alert("Please provide your email!");
+        form.email.focus();
+        return false;
+    }
+    if (form.content.value=="") {
+        alert("Please provide your comment!");
+        form.content.focus;
+        return false;
+    }
+    return true;
+}
+
+// Check that the form fields are not empty and the email addresses are email
+function messageFormValidate(form){
+    if (form.name.value == "") {
+        alert("Please provide your name!");
+        form.name.focus();
+        return false;
+    }
+    if (form.email.value=="") {
+        alert("Please provide your email!");
+        form.email.focus();
+        return false;
+    }
+    if (form.message.value=="") {
+        alert("Please provide your message!");
+        form.message.focus;
+        return false;
+    }
+    return true;
+}
+
 
 window.onload = pageLoad;

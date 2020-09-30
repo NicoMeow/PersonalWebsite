@@ -7,10 +7,6 @@ body {
     font-family: Optima;
 }
 
-a {
-    color: unset;
-}
-
 input, textarea {
     display: block;
     margin: 10px 5px;
@@ -150,7 +146,10 @@ input, textarea {
 }
 
 .socialLink {
-    font-size: 1.5em;
+    font-size: 2em;
+    position: fixed;
+    bottom:1em;
+    right:1em;
 }
 
 .blogPosts .post{
@@ -191,8 +190,20 @@ input, textarea {
 }
 
 .expanded-article-content {
+    position: relative;
     padding-left: 10%;
     padding-right: 10%;
+}
+
+#commentView {
+    position: relative;
+    top: 0;
+    left: 0;
+}
+
+/* add padding so the that the bottom section of add comment is not cropped */
+#send-article {
+    margin-bottom: 15em;
 }
 
 .message-block{
@@ -210,13 +221,13 @@ input, textarea {
     height: 3%;
 }
 
-.post-comment {
+.click-button{
     display: block;
     background-color: transparent;
     border: transparent;
 }
 
-.post-comment:hover {
+.click-button:hover {
     color: #000000;
     background-color: #FFFFFF;
 }
@@ -227,7 +238,7 @@ input, textarea {
   width: 50%;
 }
 
-.message-forms:after {
+#messageForm:after {
     content: "";
     display: table;
     clear: both;
@@ -243,6 +254,23 @@ input, textarea {
     padding-bottom: 3em;
 }
 
-.expanded-article .article-view {
-    margin-bottom: 50px;
+#successMessage {
+    display: none;
+}
+
+#sendAnotherBtn {
+    display: block;
+    background-color: transparent;
+}
+
+button {
+    all: unset;
+}
+#sendAnotherBtn:hover {
+    color: #000000;
+    background-color: #FFFFFF;
+}
+
+a:-webkit-any-link {
+    color: white;
 }

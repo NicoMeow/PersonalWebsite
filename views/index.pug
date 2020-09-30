@@ -19,6 +19,7 @@ h1 Hi I&apos;m Charlene. Nice to meet you ^_^
       i.fas.fa-angle-right
 .section-block
   h2 Projects
+  p Coming soon...
   span.project
     .projectIcon
     .projectName
@@ -38,28 +39,26 @@ h1 Hi I&apos;m Charlene. Nice to meet you ^_^
       .article-view
         h4#title
         p#content
-      #comment-view.comment-view
+      #comment-view
         h2 Comments
         #add-new-comment
-          form#commentForm.message-forms(action='/leave-comment' method='post')
+          form#commentForm
             input#blogPostId(type='hidden' name='blogPostId')
             .column
               label
                 | Add Comment
                 textarea#message-box-article.message-block(name='content' rows='10' cols='50' placeholder='Your Comment Here.')
             .column
-              label
-                | Name
-                input#name-article.message-block(name='name' type='text' placeholder='Enter Name')
+              label(for='name') Name
+              input#name-article.message-block(name='name' type='text' placeholder='Enter Name')
               br
-              label
-                | Email
-                input#email-article.message-block(name='email' type='email' placeholder='Enter Email')
+              label(for='email') Email
+              input#email-article.message-block(name='email' type='email' placeholder='Enter Email')
               br
-              input#send-article.post-comment(type='submit')
+              input#send-article.click-button(type='submit')
 .section-block
   h2 Connect
-  form.message-forms(action='/send-message' method='post')
+  form#messageForm
     .column
       label
         | Message 
@@ -71,10 +70,17 @@ h1 Hi I&apos;m Charlene. Nice to meet you ^_^
       label(for='email') Email
       input#email.message-block(name='email' type='email' placeholder='Enter Email')
       br
-      input#send.post-comment(type='submit' value='Submit')
+      input#send-message.click-button(type='submit' value='Submit')
+.section-block
+   #successMessage
+     p Message sent successfully. Thank you!
+     button#sendAnotherBtn(type='button') Send Another
 .socialLink
   a(href='https://www.facebook.com/profile.php?id=100006520725976')
     i.fab.fa-facebook-square
+  br
   a(href='https://www.instagram.com/charlene_z.h/')
     i.fab.fa-instagram-square
-  i.fab.fa-linkedin
+  br
+  a(href="https://www.linkedin.com/in/zhihan-charlene-jia-813990b0/")
+    i.fab.fa-linkedin

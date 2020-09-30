@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const express = require('express');
 const path = require('path');
 const app = express();
+const helmet = require('helmet');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 const fs = require('fs');
@@ -26,6 +27,8 @@ app.set("views", path.join(__dirname, "views"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/public'));
+//middleware to check against well known vulnerabilities
+app.use(helmet());
 
 //database connections
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -40,6 +43,40 @@ const BLOG_POSTS = [
                                                                     "alism is awesome. It solves all the problems in the world for me people like me whose only worry is having too much." +
                                                                     "I think Minimalism is awesome. It solves all the problems in the world for me people like me whose only worry is having too much." +
                                                                     "I think Minimalism is awesome. Ialism is awesome. It solves all the problems in the world for me people like me whose only worry is having too much." +
+                                                                    "I think Minimalism is awesome. It solves all the problems in the world for me people like me whose only worry is having too much." +
+                                                                    "I think Minimalism is awesome. It solves all the problems in the world for me people like me whose only worry is having too much." +
+                                                                    "I think Minimalism is awesome. It solves all the problems in the world for me people like me whose only worry is having too much." +
+                                                                    "I think Minimalism is awesome. It solves all the problems in the world for me people like me whose only worry is having too much." +
+                                                                    "I think Minimalism is awesome. It solves all the problems in the world for me people like me whose only worry is having too much." +
+                                                                    "I think Minimalism is awesome. It solves all the problems in the world for me people like me whose only worry is having too much." +
+                                                                    "I think Minimalism is awesome. It solves all the problems in the world for me people like me whose only worry is having too much." +
+                                                                    "I think Minimalism is awesome. It solves all the problems in the world for me people like me whose only worry is having too much." +
+                                                                    "I think Minimalism is awesome. It solves all the problems in the world for me people like me whose only worry is having too much." +
+                                                                    "I think Minimalism is awesome. It solves all the problems in the world for me people like me whose only worry is having too much." +
+                                                                    "I think Minimalism is awesome. It solves all the problems in the world for me people like me whose only worry is having too much." +
+                                                                    "I think Minimalism is awesome. It solves all the problems in the world for me people like me whose only worry is having too much." +
+                                                                    "I think Minimalism is awesome. It solves all the problems in the world for me people like me whose only worry is having too much." +
+                                                                    "I think Minimalism is awesome. It solves all the problems in the world for me people like me whose only worry is having too much." +
+                                                                    "I think Minimalism is awesome. It solves all the problems in the world for me people like me whose only worry is having too much." +
+                                                                    "I think Minimalism is awesome. It solves all the problems in the world for me people like me whose only worry is having too much." +
+                                                                    "I think Minimalism is awesome. It solves all the problems in the world for me people like me whose only worry is having too much." +
+                                                                    "I think Minimalism is awesome. It solves all the problems in the world for me people like me whose only worry is having too much." +
+                                                                    "I think Minimalism is awesome. It solves all the problems in the world for me people like me whose only worry is having too much." +
+                                                                    "I think Minimalism is awesome. It solves all the problems in the world for me people like me whose only worry is having too much." +
+                                                                    "I think Minimalism is awesome. It solves all the problems in the world for me people like me whose only worry is having too much." +
+                                                                    "I think Minimalism is awesome. It solves all the problems in the world for me people like me whose only worry is having too much." +
+                                                                    "I think Minimalism is awesome. It solves all the problems in the world for me people like me whose only worry is having too much." +
+                                                                    "I think Minimalism is awesome. It solves all the problems in the world for me people like me whose only worry is having too much." +
+                                                                    "I think Minimalism is awesome. It solves all the problems in the world for me people like me whose only worry is having too much." +
+                                                                    "I think Minimalism is awesome. It solves all the problems in the world for me people like me whose only worry is having too much." +
+                                                                    "I think Minimalism is awesome. It solves all the problems in the world for me people like me whose only worry is having too much." +
+                                                                    "I think Minimalism is awesome. It solves all the problems in the world for me people like me whose only worry is having too much." +
+                                                                    "I think Minimalism is awesome. It solves all the problems in the world for me people like me whose only worry is having too much." +
+                                                                    "I think Minimalism is awesome. It solves all the problems in the world for me people like me whose only worry is having too much." +
+                                                                    "I think Minimalism is awesome. It solves all the problems in the world for me people like me whose only worry is having too much." +
+                                                                    "I think Minimalism is awesome. It solves all the problems in the world for me people like me whose only worry is having too much." +
+                                                                    "I think Minimalism is awesome. It solves all the problems in the world for me people like me whose only worry is having too much." +
+                                                                    "I think Minimalism is awesome. It solves all the problems in the world for me people like me whose only worry is having too much." +
                                                                     "I think Minimalism is awesome. It solves all the problems in the world for me people like me whose only worry is having too much." +
                                                                     "I think Minimalism is awesome. I"
     },
@@ -77,71 +114,78 @@ app.get('/get-comments/:id', (req, res) => {
 })
 
 //Email setup
-//var transporter = nodemailer.createTransport({
-//  service: 'gmail',
-//  auth: {
-//    user: 'avmikechi@gmail.com',
-//    pass: 'stickTopl4n'
-//  }
-//});
-//
-//var mailOptions = {
-//  from: 'avmikechi@gmail.com',
-//  to: 'avmikechi@gmail.com',
-//  subject: 'Sending Email using Node.js',
-//  text: 'That was easy!'
-//};
-//
-//transporter.sendMail(mailOptions, function(error, info){
-//  if (error) {
-//    console.log(error);
-//  } else {
-//    console.log('Email sent: ' + info.response);
-//  }
-//});
+var transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'personalwebsitecharlene',
+    pass: 'fiwkaz-vamwuw-fahtU8'
+  }
+});
 
-app.post('/send-message', (req, res) => {
-    console.log("clicked on submit button");
-    console.log("request body is " + req.body);
-    console.log((JSON.stringify(req.body)));
-    console.log("commenter name is" + req.body.name);
-    Message.create(req.body).then((dbMessage) => {
-        //If we are able to successfully create message, send it back to client;
-        res.json(dbMessage);
-    }).catch((err) => {
-        //If an error occurred, send it to the client
-        res.json(err);
-    });
-})
+var mailOptions = {
+  from: 'personalwebsitecharlene@gmail.com',
+  to: 'personalwebsitecharlene@gmail.com',
+  subject: 'Sending Email using Node.js',
+  text: 'That was easy!'
+};
 
 app.post('/leave-comment', (req, res) => {
     let form = new multiparty.Form();
     let comment = {};
     comment.date = new Date();
     form.parse(req, (err, fields, files) => {
-        console.log("fields are " + JSON.stringify(fields));
-        //console.log("files are " + JSON.stringify(files));
+        console.log("comment fields are " + JSON.stringify(fields));
+        //Process the FormData and add to comment object
         Object.keys(fields).forEach((key) => {
             comment[key] = fields[key][0];
         })
         console.log("comment is" + JSON.stringify(comment));
         Comment.create(comment).then((dbMessage) => {
             res.send(comment);
-            // Send the response should render the document with the new comment
         }).catch((err) => {
-            console.log("code reached error");
+            console.log("cannot save to database" + dbMessage);
             res.json(err);
+        });
+    });
+});
+
+app.post('/send-message', (req, res) => {
+    let form = new multiparty.Form();
+    let message = {};
+    message.date = new Date();
+    form.parse(req, (err, fields, files) => {
+        console.log("message fields are " + JSON.stringify(fields));
+        //Process the FormData and add to message object
+        Object.keys(fields).forEach((key) => {
+            message[key] = fields[key][0]
         })
+        console.log("message is" + JSON.stringify(message));
+        var mailOptions = {
+          from: 'personalwebsitecharlene@gmail.com',
+          to: 'personalwebsitecharlene@gmail.com',
+          subject: `[PersonalWebsite message] Sender: ${message.name} Email: ${message.email}`,
+          text: message.message,
+        };
+        transporter.sendMail(mailOptions, function(error, info){
+          if (error) {
+            console.log(error);
+            res.send("cannot send email" + error);
+          } else {
+            console.log('Email sent: ' + info.response);
+            res.send("success! + info.response");
+          }
+        });
+        // no need to save message to database at this moment, instead just send email.
+//        Message.create(message).then((dbMessage) => {
+//            res.send(message);
+//            //TODO..
+//            //Send email
+//        }).catch((err) => {
+//            console.log("cannot save to database" + dbMessage);
+//            res.json(err);
+//        })
     })
-//    console.log("clicked on submit button to leave comment");
-//    console.log("request body is " + (JSON.stringify(req.body)));
-//    let comment = req.body;
-//    comment.date = new Date();
-//    console.log("comment is" + JSON.stringify(comment));
-
 })
-
-
 
 
 
