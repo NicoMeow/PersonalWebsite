@@ -108,11 +108,11 @@ const BLOG_POSTS = [
 //retrieve all the image path, check if the file is image and put it in photoPaths array
 //var rawPhotoPaths = fs.readdirSync('public/images/');
 var photoPaths=[];
-for (photo of rawPhotoPaths) {
-    if (isImage(photo)) {
-        photoPaths.push(photo);
-    }
-}
+//for (photo of rawPhotoPaths) {
+//    if (isImage(photo)) {
+//        photoPaths.push(photo);
+//    }
+//}
 
 app.get('/', (req, res) => {
     //Render index.html with blog posts and comments from database before sending
