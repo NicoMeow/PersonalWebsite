@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const express = require('express');
 const path = require('path');
 const app = express();
-const helmet = require('helmet');
+//const helmet = require('helmet');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 const fs = require('fs');
@@ -11,7 +11,13 @@ const nodemailer = require('nodemailer');
 const isImage = require('is-image');
 const multiparty = require('multiparty');
 const PORT = 8000;
+const AWS = require("aws-sdk");
 
+//load configuration from staging or local environment
+//local
+//require('custom-env').env()
+//staging
+//require('custom-env').env('staging')
 
 //Require model
 var Message = require("./model/message.js");
@@ -28,10 +34,23 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/public'));
 //middleware to check against well known vulnerabilities
-app.use(helmet());
+//app.use(helmet());
 
 //database connections
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+
+//AWS access
+//
+//
+//AWS.config.getCredentials(function(err) {
+//  if (err) console.log(err.stack);
+//  // credentials not loaded
+//  else {
+//    console.log("Access key:", AWS.config.credentials.accessKeyId);
+//  }
+//});
+
+
 
 // TODO..
 // Read from txt files in the files system or db, compile to a JSON string
@@ -87,7 +106,7 @@ const BLOG_POSTS = [
     },
 ]
 //retrieve all the image path, check if the file is image and put it in photoPaths array
-var rawPhotoPaths = fs.readdirSync('public/images/');
+//var rawPhotoPaths = fs.readdirSync('public/images/');
 var photoPaths=[];
 for (photo of rawPhotoPaths) {
     if (isImage(photo)) {

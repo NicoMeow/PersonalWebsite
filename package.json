@@ -7,7 +7,10 @@
   "description": "my first project to learn the basics of web development",
   "main": "app.js",
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.0",
+    "aws-sdk": "^2.766.0",
     "body-parser": "^1.19.0",
+    "custom-env": "^2.0.1",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "helmet": "^4.1.1",
