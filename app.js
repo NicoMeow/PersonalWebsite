@@ -108,6 +108,7 @@ const BLOG_POSTS = [
 //retrieve all the image path, check if the file is image and put it in photoPaths array
 //var rawPhotoPaths = fs.readdirSync('public/images/');
 var photoPaths=[];
+// temporarily commented out
 //for (photo of rawPhotoPaths) {
 //    if (isImage(photo)) {
 //        photoPaths.push(photo);
