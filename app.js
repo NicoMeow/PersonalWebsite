@@ -12,8 +12,7 @@ const isImage = require('is-image');
 const multiparty = require('multiparty');
 const PORT = process.env.PORT || 8000
 const AWS = require("aws-sdk");
-const LOCAL_PHOTO_PATH = 'public/images/';
-const REMOTE_PHOTO_PATH = 'http://s3.amazonaws.com/personalwebsitecharlene-media/'
+const config = require("./config.json");
 
 //load configuration from staging or local environment
 //local
@@ -41,17 +40,48 @@ app.use(express.static(__dirname + '/public'));
 //database connections
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
-//AWS access
-//
-//
-//AWS.config.getCredentials(function(err) {
-//  if (err) console.log(err.stack);
-//  // credentials not loaded
-//  else {
-//    console.log("Access key:", AWS.config.credentials.accessKeyId);
-//  }
-//});
+//retrieve photos from aws s3
+var photoPaths = [];
+(async function createPhotoPaths() {
+    try {
+        AWS.config.setPromisesDependency();
+        AWS.config.update({
+            accessKeyId: config.aws.accessKey,
+            secretAccessKey: config.aws.secretKey,
+            region: 'ca-central-1'
+        })
+        const s3 = new AWS.S3();
+        const imgList =  await s3.listObjectsV2({
+            Bucket: "personalwebsitecharlene-media",
+        }).promise();
+        for (content of imgList.Contents) {
+            getImage(content.Key).then((img) => {
+                let path = "data:image/jpeg;base64," + encode(img.Body);
+                photoPaths.push(path);
+            })
+        }
+    } catch (err) {
+        console.log("s3 error", err);
+    }
+})();
 
+
+async function getImage(imgName){
+    const s3 = new AWS.S3();
+    const data =  s3.getObject(
+    {
+        Bucket: 'personalwebsitecharlene-media',
+        Key: imgName
+    }).promise();
+    return data;
+    }
+
+//helper function to encode image
+function encode(data){
+    let buf = Buffer.from(data);
+    let base64 = buf.toString('base64');
+    return base64
+}
 
 
 // TODO..
@@ -107,24 +137,6 @@ const BLOG_POSTS = [
         content: "This is a much shorter most since no longer need to test lien spanning"
     },
 ]
-
-var s3 = new AWS.S3();
-var params = {Bucket: 'personalwebsitecharlene-media'}
-var s3file = s3.getObject(params)
-//console.log("s3 files are" + JSON.stringify(s3file));
-//retrieve all the image path, check if the file is image and put it in photoPaths array
-//var rawPhotoPaths = fs.readdirSync(REMOTE_PHOTO_PATH);
-//var rawPhotoPaths = REMOTE_PHOTO_PATH;
-//console.log("rawPhotoPath is" + rawPhotoPaths);
-var photoPaths=[];
-////temporarily commented out
-//for (photo of rawPhotoPaths) {
-//    if (isImage(photo)) {
-//        photoPaths.push(photo);
-//    }
-//}
-
-photoPaths.push("http://s3.amazonaws.com/personalwebsitecharlene-media/IMG_0537.jpeg")
 
 app.get('/', (req, res) => {
     //Render index.html with blog posts and comments from database before sending
