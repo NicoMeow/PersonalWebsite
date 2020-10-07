@@ -13,7 +13,7 @@ const multiparty = require('multiparty');
 const PORT = process.env.PORT || 8000
 const AWS = require("aws-sdk");
 const LOCAL_PHOTO_PATH = 'public/images/';
-const REMOTE_PHOTO_PATH = 'http://s3.amazonaws.com/personalwebsitecharlene-media'
+const REMOTE_PHOTO_PATH = 'http://s3.amazonaws.com/personalwebsitecharlene-media/'
 
 //load configuration from staging or local environment
 //local
@@ -113,14 +113,18 @@ var params = {Bucket: 'personalwebsitecharlene-media'}
 var s3file = s3.getObject(params)
 //console.log("s3 files are" + JSON.stringify(s3file));
 //retrieve all the image path, check if the file is image and put it in photoPaths array
-var rawPhotoPaths = fs.readdirSync(REMOTE_PHOTO_PATH);
+//var rawPhotoPaths = fs.readdirSync(REMOTE_PHOTO_PATH);
+//var rawPhotoPaths = REMOTE_PHOTO_PATH;
+//console.log("rawPhotoPath is" + rawPhotoPaths);
 var photoPaths=[];
-//temporarily commented out
-for (photo of rawPhotoPaths) {
-    if (isImage(photo)) {
-        photoPaths.push(photo);
-    }
-}
+////temporarily commented out
+//for (photo of rawPhotoPaths) {
+//    if (isImage(photo)) {
+//        photoPaths.push(photo);
+//    }
+//}
+
+photoPaths.push("http://s3.amazonaws.com/personalwebsitecharlene-media/IMG_0537.jpeg")
 
 app.get('/', (req, res) => {
     //Render index.html with blog posts and comments from database before sending
