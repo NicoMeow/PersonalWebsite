@@ -12,7 +12,6 @@ const isImage = require('is-image');
 const multiparty = require('multiparty');
 const PORT = process.env.PORT || 8000
 const AWS = require("aws-sdk");
-const config = require("./config.json");
 
 //load configuration from staging or local environment
 //local
@@ -46,8 +45,8 @@ var photoPaths = [];
     try {
         AWS.config.setPromisesDependency();
         AWS.config.update({
-            accessKeyId: config.aws.accessKey,
-            secretAccessKey: config.aws.secretKey,
+            accessKeyId: process.env.AWS_ACCESS_KEY,
+            secretAccessKey: process.env.AWS_SECRET_KEY,
             region: 'ca-central-1'
         })
         const s3 = new AWS.S3();
