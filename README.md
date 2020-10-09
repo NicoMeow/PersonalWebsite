@@ -5,15 +5,15 @@ The goal for one is to create a customized space to display my work, but also to
 So throughout the process, I constantly reminded myself to stick to the original design I drew up on a piece of paper, and to only include additional libraries unless absolutely necessary. There was a tendency to change up the designs for a easier solution, or rely on somebody else's code when things don't work. This approach helped me develop a deeper understanding of the fundamentals and push through obstacles. Moving forward as I learn more about development, I would continuously update the project for better code quality and performance.
 # Tech/framework used
 Project created with:
-Backend:
-  Node.js: 12.16.3
-  Express: 4.17.1
-  mongodb: 3.5.7
-  mongoose: 5.9.11
-  nodemailer: 6.4.6
-  pug: 3.0.0
-  aws-sdk: 2.766.0
-Frontend:
-  HTML, CSS, FontAwesome, vanilla Javascript
+* Backend:
+  * Node.js: 12.16.3
+  * Express: 4.17.1
+  * mongodb: 3.5.7
+  * mongoose: 5.9.11
+  * nodemailer: 6.4.6
+  * pug: 3.0.0
+  * aws-sdk: 2.766.0
+* Frontend:
+  * HTML, CSS, FontAwesome, vanilla Javascript
   
   
