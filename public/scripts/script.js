@@ -124,10 +124,10 @@ function sendUpdateComment() {
     var xhr = new XMLHttpRequest();
     //var FD = new FormData(commentForm);
     var FD = new FormData(commentForm);
+    // Clear the form and append the comment to existing comments;
+    document.getElementById("commentForm").reset();
     // Define what happens on successful data submission
     xhr.addEventListener("load", function(event) {
-      // Clear the form and append the comment to existing comments;
-      document.getElementById("commentForm").reset();
       formatComment(JSON.parse(this.responseText));
     });
     // Define what happens in case of error
@@ -141,9 +141,9 @@ function sendUpdateComment() {
 function sendMessage() {
     var xhr = new XMLHttpRequest();
     var FD = new FormData(messageForm);
+    document.getElementById("messageForm").reset();
     // Define what happens on successful data submission
     xhr.addEventListener("load", function(event) {
-       document.getElementById("messageForm").reset();
        //replace the send message form with successMessage
        document.getElementById('messageForm').style.display = "none";
        document.getElementById('successMessage').style.display = "block";
